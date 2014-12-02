@@ -1,21 +1,15 @@
-class Introflector
-  def initialize
-    @trace = nil
-
-    @transmitter = Transmitter.new
-  end
-
-  def introflect
-    @trace = TracePoint.new do |tp|
-      @transmitter.transmit(tp.lineno)
+module Introflection
+  class Introflector
+    def initialize
+      @tracer = Tracer.new
     end
 
-    @trace.enable
+    def introflect
+      @tracer.enable
+    end
 
-  end
-
-  def deintroflect
-    @trace.disable
-    @transmitter.disable
+    def deintroflect
+      @tracer.disable
+    end
   end
 end

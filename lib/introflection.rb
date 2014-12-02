@@ -1,7 +1,11 @@
 require 'socket'
 require 'logger'
+require 'thread'
 
 require 'introflection/core_ext'
+require 'introflection/pack_methods'
+require 'introflection/packer'
+require 'introflection/tracer'
 require 'introflection/introflector'
 require 'introflection/transmitter'
 
@@ -13,22 +17,30 @@ module Introflection
 
   # Starts an introflection session. Transmits events to the Introflection event
   # server.
-  # @return [true]
+  # @see #deintroflect
+  # @return [Boolean]
   def self.introflect
-    ILogger.debug('Starting Introflection...')
+    return false if @introflecting
+
+    ILogger.debug('Starting Introflection')
 
     @introflector = Introflector.new
-    @introflector.introflect
+    if @introflector.introflect
+      @introflecting = true
+    end
 
-    ILogger.debug('Introflection is working')
-    true
+    @introflecting
   end
 
   # Stops the introflection session. Does not attempt to send any events
   # anymore.
-  # @return [true]
+  # @see #introflect
+  # @return [Boolean]
   def self.deintroflect
+    return false unless @introflecting
+
     @introflector.deintroflect
+    @introflecting = false
     true
   end
 end
