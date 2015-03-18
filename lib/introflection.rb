@@ -1,20 +1,29 @@
+require 'nesting'
+
 require 'socket'
 require 'logger'
 require 'thread'
+require 'forwardable'
 
 require 'introflection/core_ext'
-require 'introflection/pack_methods'
-require 'introflection/packer'
-require 'introflection/tracer'
+
+# require 'introflection/trace'
+# require 'introflection/trace_manager'
+
+require 'introflection/module_space'
+require 'introflection/module_space/module_unit'
+require 'introflection/module_space/core_modules'
+
+require 'introflection/event'
+require 'introflection/event/module_added'
+
+require 'introflection/event_server'
+# require 'introflection/trace_event'
 require 'introflection/introflector'
-require 'introflection/transmitter'
 
 # A fancy tracing thing.
 #
 module Introflection
-  # IntroflectionLogger. A global logger.
-  ILogger = Logger.new(STDOUT)
-
   # Starts an introflection session. Transmits events to the Introflection event
   # server.
   # @see #deintroflect
@@ -22,10 +31,8 @@ module Introflection
   def self.introflect
     return false if @introflecting
 
-    ILogger.debug('Starting Introflection')
-
     @introflector = Introflector.new
-    if @introflector.introflect
+    if @introflector.start_introflecting
       @introflecting = true
     end
 
@@ -39,8 +46,9 @@ module Introflection
   def self.deintroflect
     return false unless @introflecting
 
-    @introflector.deintroflect
+    @introflector.stop_introflecting
     @introflecting = false
+
     true
   end
 end

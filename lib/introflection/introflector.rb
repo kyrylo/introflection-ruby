@@ -1,15 +1,20 @@
 module Introflection
   class Introflector
     def initialize
-      @tracer = Tracer.new
+      @event_server = EventServer.new
+      @module_space = ModuleSpace.new
     end
 
-    def introflect
-      @tracer.enable
+    def start_introflecting
+      @module_space.each_module do |mod|
+        @event_server.send(Event.new(trigger: :module_added, data: mod))
+      end
+
+#      @tracer.enable
     end
 
-    def deintroflect
-      @tracer.disable
+    def stop_introflecting
+#      @tracer.disable
     end
   end
 end
