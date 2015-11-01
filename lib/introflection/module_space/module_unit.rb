@@ -57,6 +57,10 @@ module Introflection
         @mod.__id__
       end
 
+      def to_s
+        "{#{id}, #{name}, #{nesting_level}, #{parent}}"
+      end
+
       private
 
       def on_core_modules_list?

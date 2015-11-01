@@ -13,7 +13,7 @@ module Introflection
         h={ event: 0,
             data: {
               object_id: @mod.id,
-              name: @mod.name.force_encoding(Encoding::UTF_8),
+              name: @mod.name,
               # type: @mod.type,
               # origin: @mod.origin,
               nesting: @mod.nesting_level,

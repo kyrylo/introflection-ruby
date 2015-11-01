@@ -6,6 +6,7 @@ require 'thread'
 require 'forwardable'
 
 require 'introflection/core_ext'
+require 'introflection/logger'
 
 # require 'introflection/trace'
 # require 'introflection/trace_manager'
@@ -31,6 +32,8 @@ module Introflection
   def self.introflect
     return false if @introflecting
 
+    Logger.debug("Starting introflecting")
+
     @introflector = Introflector.new
     if @introflector.start_introflecting
       @introflecting = true
@@ -48,6 +51,8 @@ module Introflection
 
     @introflector.stop_introflecting
     @introflecting = false
+
+    Logger.debug("Stopped introflecting")
 
     true
   end

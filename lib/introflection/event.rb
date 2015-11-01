@@ -1,5 +1,9 @@
 module Introflection
   class Event
+    extend Forwardable
+
+    def_delegator :@data, :to_s
+
     TRIGGERS = {
       :module_added => 0
     }

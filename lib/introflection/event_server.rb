@@ -1,7 +1,7 @@
 module Introflection
   class Message
-    BMARK = 'introflection'.freeze
-    EMARK = "\r\n".freeze
+    START_MARK = "introflection".force_encoding(Encoding::UTF_8).freeze
+    END_MARK = "\r\n".force_encoding(Encoding::UTF_8).freeze
 
     def initialize(event)
       @event = event
@@ -9,13 +9,12 @@ module Introflection
     end
 
     def dump
-      binding.pry
       [
-        BMARK,
+        START_MARK,
         event_trigger,
         data_size,
         data,
-        EMARK
+        END_MARK
       ].join('')
     end
 
@@ -40,15 +39,14 @@ module Introflection
 
   class EventServer
     def initialize
-      @cnt = 0
+      @events_sent = 0
       @connection = TCPSocket.new('localhost', 7331)
     end
 
     def send(event)
-      @cnt += 1
-      var = event.instance_variable_get(:@data)
-      puts "SENDING #{var.id} #{var.name} (#{@cnt})"
       @connection.puts(Message.new(event).dump)
+      @events_sent += 1
+      Logger.debug("EventServer #{@events_sent} sent: #{event}")
     end
 
     def disable

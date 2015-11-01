@@ -10,7 +10,7 @@ module Introflection
         @event_server.send(Event.new(trigger: :module_added, data: mod))
       end
 
-#      @tracer.enable
+      # @tracer.enable
     end
 
     def stop_introflecting

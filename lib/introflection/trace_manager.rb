@@ -2,7 +2,7 @@ module Introflection
   class TraceManager
     EVENTS = [
         :line,
-        # :class,
+        :class,
         # :end,
         # :call,
         # :return,
